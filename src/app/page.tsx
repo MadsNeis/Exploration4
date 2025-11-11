@@ -1,10 +1,13 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+import {useProfile} from "@/contexts/profileContext"
 
 export default function Home() {
+  const { profile } = useProfile
   return (
     <div >
-      Hello World! 
+      {
+        profile ? `hello, ${profile.full_name}` : `Hello World`
+      }
     </div>
   );
 }
