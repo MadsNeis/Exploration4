@@ -2,17 +2,22 @@
 import { createContext, useContext } from 'react'
 import { Profile } from '@/types/profile'
 
+import { useRouter } from 'next/navigation'
+
 // data structure
 type ProfileProps = {
-    profile: Profile | undefined
-    updateProfile: (profile: Profile, avatar: File | undefined) => void
+    profile: Profile | undefined,
+    updateProfile: (profile: Profile, avatar: File | undefined) => void,
+    signOut: () => void
 }
 
 // create context 
 const ProfileContext = createContext<ProfileProps | undefined>(undefined)
 
 //provider
-export function ProfileProvider(props: {profile: Profile | undefined, children: React.ReactNode}){
+export function ProfileProvider(props: { profile: Profile | undefined, children: React.ReactNode}){
+
+    const router = useRouter()
 
     async function updateProfile(profile: Profile, avatar: File | undefined){
 
@@ -22,9 +27,10 @@ export function ProfileProvider(props: {profile: Profile | undefined, children: 
             formData.append("id", profile.id)
             formData.append("image", avatar)
 
-            const res = fetch("/api/avatar",
+            const res = await fetch("/api/avatar",
                 {
                     method:"POST",
+                    body: formData
 
                 }
             )
@@ -36,8 +42,13 @@ export function ProfileProvider(props: {profile: Profile | undefined, children: 
         console.log(avatarUrl)
     }
 
+    async function signOut() {
+        await fetch("api/signout")
+        router.push("/login")
+    }
+
     return(
-        <ProfileContext.Provider value ={{profile: props.profile, updateProfile}}>
+        <ProfileContext.Provider value ={{profile: props.profile, updateProfile, signOut}}>
             {props.children}
         </ProfileContext.Provider>
     )

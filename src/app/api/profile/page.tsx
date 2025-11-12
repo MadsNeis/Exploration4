@@ -10,17 +10,17 @@ export default function Home(){
 
     const { profile, updateProfile } = useProfile()
 
-    const[fullName, setFullName] = useState<string>(profile.full_name ?? "" : "")
-    const[website, setWebsite] = useState<string>(profile.website ?? "" : "")
+    const[fullName, setFullName] = useState<string>(profile?.full_name ?? "")
+    const[website, setWebsite] = useState<string>(profile?.website ?? "")
     const[avatar, setAvatar] = useState<File | undefined>(undefined);
-    const[avatarUrl, setAvatarUrl] = useState<string>(profile.avatar_url ?? "" : "")
+    const[avatarUrl, setAvatarUrl] = useState<string>(profile?.avatar_url ?? "")
 
     function handleAvatar(e: React.ChangeEvent<HTMLInputElement>){
         const file = e.target.files?.[0]
         if (!file) return
 
         const options = {
-            maxWidthOrHeigth: 256,
+            maxWidthOrHeight: 256,
             fileType: 'image/webp'
         }
 
@@ -54,14 +54,14 @@ export default function Home(){
 
     return(
         <Box sx={{ display: "grid", gap:2, maxWidth: 300}}>
-            <Avatar src={avatarUrl} sx={{ width:100, heigth:100}}/>
+            <Avatar src={avatarUrl} sx={{ width:100, height:100}}/>
             <Button variant="contained" component="label">
                 {avatar ? avatar.name : "Upload Avatar"}
                 <input type="file" acce-t="image/*" onChange={handleAvatar}/>
             </Button>
             <TextField
                 id="email"
-                value={profile.username ?? ""}
+                value={profile?.username ?? ""}
                 label={"Email"}
                 slotProps={{
                     input: {readOnly: true}

@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server"
 
-import { put, list, del } from "@/vercel/blob"
+import { put, list, del } from '@vercel/blob';
 
 export async function POST(request: Request){
     const supabase = await createClient()
@@ -15,6 +15,10 @@ export async function POST(request: Request){
     const image = formData.get('image')
     const id = formData.get('id')
 
+    if (!image || typeof image === 'string') {
+        return Response.json({message: "Invalid image file"})
+    }
+
     if (id !== user.data.user.id){
         return Response.json({message: "Invalid User Id"})
     }
@@ -22,8 +26,8 @@ export async function POST(request: Request){
     const userFolder = `${user.data.user.id}/`
     const existingFiles = await list({prefix: userFolder})
 
-    for (let i - 0; i < existingFiles.blobslength; i++){
-        del(existingFiles.blobs[i]).pathname
+    for (let i = 0; i < existingFiles.blobs.length; i++){
+        await del(existingFiles.blobs[i].pathname)
     }
 
     const filename = `${id}/avatar.webp`
