@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/upabase/server"
+import { createClient } from "@/utils/supabase/server"
 
 import { put, list, del } from "@/vercel/blob"
 

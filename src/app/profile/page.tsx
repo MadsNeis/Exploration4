@@ -7,14 +7,13 @@ import { useState, useEffect } from "react"
 import imageCompression from "browser-image-compression"
 
 export default function Home(){
+
     const { profile, updateProfile } = useProfile()
 
-    if(!profile) return <></>
-
-    const[fullName, setFullName] = useState<string>(profile.full_name ?? "")
-    const[website, setWebsite] = useState<string>(profile.website ?? "")
+    const[fullName, setFullName] = useState<string>(profile.full_name ?? "" : "")
+    const[website, setWebsite] = useState<string>(profile.website ?? "" : "")
     const[avatar, setAvatar] = useState<File | undefined>(undefined);
-    const[avatarUrl, setAvatarUrl] = useState<string>(profile.avatar_url ?? "")
+    const[avatarUrl, setAvatarUrl] = useState<string>(profile.avatar_url ?? "" : "")
 
     function handleAvatar(e: React.ChangeEvent<HTMLInputElement>){
         const file = e.target.files?.[0]
@@ -25,7 +24,7 @@ export default function Home(){
             fileType: 'image/webp'
         }
 
-        var controller = new AbortController()
+        const controller = new AbortController()
 
         imageCompression(file, options)
             .then((compressedFile)=>setAvatar(compressedFile))
