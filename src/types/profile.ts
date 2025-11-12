@@ -5,3 +5,5 @@ export type Profile = {
     avatar_url: string | null,
     website: string | null
 }
+
+export const profileSelectString = "id, username, full_name, avatar_url, website"

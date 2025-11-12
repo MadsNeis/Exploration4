@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 
 import { ProfileProvider } from "@/contexts/profileContext";
 
+import { Profile, profileSelectString } from "@/types/profile"
+
 export const metadata: Metadata = {
   title: "Exploration Four",
   description: "Created by Madison Neiswonger",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode; 
@@ -48,9 +50,13 @@ async function getProfile() : Promise<Profile | undefined>{
 
   const user = await supabase.auth.getUser()
 
+  if (!user || !user.data.user){
+    return undefined
+  }
+
   const data = await supabase 
     .from('profiles')
-    .select()
+    .select(profileSelectString)
     .eq('id', user.data.user?.id)
 
   console.log(data.data)
@@ -60,6 +66,12 @@ async function getProfile() : Promise<Profile | undefined>{
   if (data.data && data.data.length > 0){
     profile = data.data[0]
   }
+
+  if (profile){
+    profile.username = user.data.user.email ?? null
+  }
+
+  console.log(profile)
 
   return profile
 }

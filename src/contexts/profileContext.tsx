@@ -12,7 +12,6 @@ const ProfileContext = createContext<ProfileProps | undefined>(undefined)
 
 //provider
 export function ProfileProvider(props: {profile: Profile | undefined, children: React.ReactNode}){
-
     return(
         <ProfileContext.Provider value ={{profile: props.profile}}>
             {props.children}
